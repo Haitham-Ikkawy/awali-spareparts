@@ -1,0 +1,17 @@
+appdirs==1.4.4
+asgiref==3.2.10
+distlib==0.3.1
+Django==3.1.4
+filelock==3.0.12
+pytz==2020.1
+six==1.15.0
+sqlparse==0.3.1
+mysqlclient==2.0.1
+python-dateutil==2.8.1
+django-post-office==3.5.3
+django-mptt==0.11.0
+django-phone-field==1.8.1
+django-import-export
+stripe
+
+pillow
