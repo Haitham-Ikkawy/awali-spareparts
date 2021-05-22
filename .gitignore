@@ -1,0 +1,3 @@
+/awali/local_settings.py
+*.pyc
+.idea/*
