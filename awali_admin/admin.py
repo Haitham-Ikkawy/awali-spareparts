@@ -69,7 +69,7 @@ class AdminItemView(ImportExportModelAdmin):
 	list_display = (
 	'id', 'item_code', 'description_2', 'weight', 'oem', 'cost', 'sale_price', 'category', 'stock', 'item_brand',
 	'supplier', 'item_location')
-	search_fields = ('item_code', 'description')
+	search_fields = ('item_code', )
 	filter_horizontal = ('car_brand', 'car_model', 'car_engine', 'categories')
 	list_filter = ('category',)
 
