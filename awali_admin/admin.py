@@ -67,9 +67,9 @@ class AdminItemView(ImportExportModelAdmin):
 	save_as = True
 
 	list_display = (
-	'id', 'description', 'description_2', 'weight', 'oem', 'cost', 'sale_price', 'category', 'stock', 'item_brand',
+	'id', 'item_code','description', 'description_2', 'weight', 'oem', 'cost', 'sale_price', 'category', 'stock', 'item_brand',
 	'supplier', 'item_location')
-	search_fields = ('description_2',)
+	search_fields = ('item_code', 'description')
 	filter_horizontal = ('car_brand', 'car_model', 'car_engine', 'categories')
 	list_filter = ('category',)
 
@@ -151,7 +151,7 @@ class AdminCarModelView(admin.ModelAdmin):
 class AdminCarEngineView(admin.ModelAdmin):
 	list_display = (
 	'id', 'description', 'description_2', 'get_car_brands', 'related_car_model', 'created_at', 'updated_at')
-	search_fields = ('description', 'car_brand__description', 'created_at', 'updated_at')
+	search_fields = ('item_code', 'car_brand__description', 'created_at', 'updated_at')
 	filter_horizontal = ('car_brand', 'car_model')
 	list_filter = ()
 	fieldsets = ()
@@ -174,12 +174,23 @@ class AdminCustomerView(admin.ModelAdmin):
 	fieldsets = ()
 
 
+class InvoiceItemInline(admin.TabularInline):
+	# model = Category.car_model.through
+	model = InvoiceItems
+
+	autocomplete_fields = ('item', )
+
+
 class AdminInvoiceView(admin.ModelAdmin):
-	list_display = ('id', 'customer')
+	list_display = ('id', 'customer', 'invoice_items')
 	search_fields = ('id', 'customer')
 	filter_horizontal = ()
 	list_filter = ()
 	fieldsets = ()
+	autocomplete_fields = ('customer', )
+	inlines = [
+		InvoiceItemInline,
+	]
 
 admin.site.register(Customer, AdminCustomerView)
 

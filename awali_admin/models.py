@@ -140,17 +140,18 @@ class Item(models.Model):
 
 	auto_increment_id = models.AutoField
 
-	description = models.CharField(max_length=150, null=False, blank=False, )
-	description_2 = models.CharField(max_length=150)
+	item_code = models.CharField(max_length=150, null=False, blank=False)
+	description = models.CharField(max_length=150, null=False, blank=False)
+	description_2 = models.CharField(max_length=150, null=True, blank=True)
 	remark = models.CharField(max_length=150, null=True, blank=True)
-	stock = models.IntegerField()
+	stock = models.IntegerField(null=True, blank=True)
 	cost = models.FloatField(null=True, blank=True)
-	sale_price = models.DecimalField(null=True, decimal_places=2, max_digits=7, )
+	sale_price = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=7, )
 	min_sale_num = models.IntegerField(null=False, blank=False, default=1)
 	min_stock_quantity = models.IntegerField(null=True, blank=True)
 	max_stock_quantity = models.IntegerField(null=True, blank=True)
 	item_location = models.CharField(null=True, max_length=20, blank=True)
-	weight = models.FloatField(null=False, blank=False, )
+	weight = models.FloatField(null=True, blank=True)
 	height = models.FloatField(null=True, blank=True)
 	width = models.FloatField(null=True, blank=True)
 	image = models.ImageField(upload_to='img/items', blank=True, null=True)
@@ -161,7 +162,7 @@ class Item(models.Model):
 	accessory = models.ForeignKey(Accessories, blank=True, on_delete=models.CASCADE, null=True)
 	category = models.CharField(blank=True, null=True, max_length=10)
 	supplier = models.CharField(blank=True, null=True, max_length=10)
-	item_brand = models.ForeignKey(ItemBrand, blank=True, on_delete=models.CASCADE)
+	item_brand = models.ForeignKey(ItemBrand, blank=True, null=True, on_delete=models.CASCADE)
 	oem = models.CharField(max_length=150, blank=True)
 	cross_numbers = models.TextField(blank=True)
 	is_free_shipping = models.BooleanField(default=False)
@@ -213,8 +214,11 @@ class Invoice(models.Model):
 	created_at = models.DateField('created_at', default=now)
 	updated_at = models.DateTimeField('updated_at', default=now)
 
-	def __str__(self):
-		return self.description
+	def invoice_items(self):
+		return " / ".join([str(p.item) for p in InvoiceItems.objects.filter(invoice=self.id)])
+
+	# def __str__(self):
+	# 	return self.description
 
 	class Meta:
 		verbose_name = "Invoice"
@@ -222,9 +226,9 @@ class Invoice(models.Model):
 
 class InvoiceItems(models.Model):
 	auto_increment_id = models.AutoField
-	Invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, null=True, blank=True)
-	item = models.ForeignKey(Item, blank=True, on_delete=models.CASCADE,)
-	customer_sale_price = models.FloatField(null=True, blank=True)
+	invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, null=True, blank=True)
+	item = models.ForeignKey(Item, blank=True, on_delete=models.CASCADE, null=False,)
+	customer_sale_price = models.FloatField(null=False, blank=False)
 
 
 
