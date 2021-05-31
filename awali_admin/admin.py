@@ -63,11 +63,11 @@ class ItemResource(resources.ModelResource):
 class AdminItemView(ImportExportModelAdmin):
 	resource_class = ItemResource
 
-	advanced_filter_fields = ('description',)
+	advanced_filter_fields = ()
 	save_as = True
 
 	list_display = (
-	'id', 'item_code','description', 'description_2', 'weight', 'oem', 'cost', 'sale_price', 'category', 'stock', 'item_brand',
+	'id', 'item_code', 'description_2', 'weight', 'oem', 'cost', 'sale_price', 'category', 'stock', 'item_brand',
 	'supplier', 'item_location')
 	search_fields = ('item_code', 'description')
 	filter_horizontal = ('car_brand', 'car_model', 'car_engine', 'categories')
