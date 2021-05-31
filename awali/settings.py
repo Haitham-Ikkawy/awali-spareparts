@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'awali.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': lsettings.get('db_name', 'haithamakk$awali'),
+        'NAME': lsettings.get('db_name', 'haithamakk$awali_1'),
         'USER': lsettings.get('db_user', 'haithamakk'),
         'PASSWORD': lsettings.get('db_pass', 'awali@2121'),
         'HOST': lsettings.get('db_host', 'haithamakk.mysql.pythonanywhere-services.com'),
