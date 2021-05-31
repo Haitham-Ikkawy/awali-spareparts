@@ -9,6 +9,7 @@ from import_export import resources
 from django.db.models import Q
 
 
+
 class AdminCategoryView(DraggableMPTTAdmin):
 	mptt_level_indent = 40
 	save_as = True
@@ -180,17 +181,24 @@ class InvoiceItemInline(admin.TabularInline):
 
 	autocomplete_fields = ('item', )
 
+class InvoiceResource(resources.ModelResource):
+	class Meta:
+		model = Item
+		import_id_fields = ('id',)
+		fields = ('oem', 'description_2', 'stock', 'category', 'item_location', 'id', 'sale_price', 'cost')
+		export_order = ('oem', 'description_2', 'stock', 'category', 'item_location', 'id', 'sale_price', 'cost')
 
-class AdminInvoiceView(admin.ModelAdmin):
-	list_display = ('id', 'customer', 'invoice_items')
-	search_fields = ('id', 'customer')
-	filter_horizontal = ()
-	list_filter = ()
-	fieldsets = ()
-	autocomplete_fields = ('customer', )
+class AdminInvoiceView(ImportExportModelAdmin):
+	resource_class = InvoiceResource
 	inlines = [
 		InvoiceItemInline,
 	]
+	list_display = ('id', 'customer', 'invoice_items', 'invoice_total', 'created_at')
+	search_fields = ('customer__name', )
+	filter_horizontal = ()
+	list_filter = ('customer',)
+	fieldsets = ()
+	autocomplete_fields = ('customer', )
 
 admin.site.register(Customer, AdminCustomerView)
 

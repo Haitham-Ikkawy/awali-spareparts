@@ -140,7 +140,7 @@ class Item(models.Model):
 
 	auto_increment_id = models.AutoField
 
-	item_code = models.CharField(max_length=150, null=False, blank=False)
+	item_code = models.CharField(max_length=150, null=False, blank=False, unique=True)
 	description = models.CharField(max_length=150, null=False, blank=False)
 	description_2 = models.CharField(max_length=150, null=True, blank=True)
 	remark = models.CharField(max_length=150, null=True, blank=True)
@@ -187,7 +187,7 @@ class Item(models.Model):
 		return " / ".join([p.description for p in self.car_model.all()])
 
 	def __str__(self):
-		return self.description
+		return self.item_code
 
 	class Meta:
 		verbose_name = "Item"
@@ -217,6 +217,13 @@ class Invoice(models.Model):
 	def invoice_items(self):
 		return " / ".join([str(p.item) for p in InvoiceItems.objects.filter(invoice=self.id)])
 
+	def invoice_total(self):
+		items_obj = InvoiceItems.objects.filter(invoice=self.id)
+		total = 0
+		for item in items_obj:
+			total+= int(item.quantity)
+		return '$'+str(total)
+
 	# def __str__(self):
 	# 	return self.description
 
@@ -228,6 +235,7 @@ class InvoiceItems(models.Model):
 	auto_increment_id = models.AutoField
 	invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, null=True, blank=True)
 	item = models.ForeignKey(Item, blank=True, on_delete=models.CASCADE, null=False,)
+	quantity = models.IntegerField(null=False, blank=False)
 	customer_sale_price = models.FloatField(null=False, blank=False)
 
 
